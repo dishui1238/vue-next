@@ -1,0 +1,87 @@
+<div id="app"></div>
+<script>
+  const createAppAPI = render => {
+    // rootComponent 就是传入的 data(), render() 参数
+    return function createApp(rootComponent) {
+      const app = {
+        // app 实例上的 mount 方法， rootContainer '#el'
+        mount(rootContainer) {
+          // 挂载 vnode -> dom
+          const vnode = {
+            tag: rootComponent
+          }
+
+          // 渲染
+          render(vnode, rootContainer)
+        }
+      }
+      return app;
+    }
+  }
+
+  const createRenderer = options => {
+    const patch = (n1, n2, container) => {
+      // 根组件配置
+      const rootComponent = n2.tag;
+      const ctx = {
+        ...rootComponent.data()
+      };
+      // 执行 render 获取 vnode
+      const vnode = rootComponent.render.call(ctx);
+
+      // 转换 vnode dom
+      const parent = options.querySelector(container);
+      const child = options.createElement(vnode.tag);
+
+      if (typeof vnode.children === 'string') {
+        child.textContent = vnode.children
+      } else {
+        // array
+      }
+      options.insert(child, parent)
+    };
+    const render = (vnode, container) => {
+      patch(container._vnode || null, vnode, container);
+      container._vnode = vnode;
+    };
+
+    // 该对象就是 renderer
+    return {
+      render,
+      createApp: createAppAPI(render),
+    }
+  }
+
+  const renderer = createRenderer({
+    querySelector(el) {
+      return document.querySelector(el)
+    },
+    createElement(tag) {
+      return document.createElement(tag);
+    },
+    insert(child, parent) {
+      parent.appendChild(child)
+    }
+
+  })
+
+  const Vue = {
+    createApp(options) {
+      return renderer.createApp(options)
+    }
+  }
+
+  Vue.createApp({
+    data() {
+      return {
+        foo: 'hello, vue3!'
+      }
+    },
+    render() {
+      return {
+        tag: 'h2',
+        children: this.foo
+      }
+    }
+  }).mount('#app')
+</script>

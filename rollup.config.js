@@ -8,7 +8,9 @@ if (!process.env.TARGET) {
 }
 
 const masterVersion = require('./package.json').version
+// 指向 packages 目录
 const packagesDir = path.resolve(__dirname, 'packages')
+// 包目录
 const packageDir = path.resolve(packagesDir, process.env.TARGET)
 const name = path.basename(packageDir)
 const resolve = p => path.resolve(packageDir, p)
@@ -18,6 +20,7 @@ const packageOptions = pkg.buildOptions || {}
 // ensure TS checks only once for each build
 let hasTSChecked = false
 
+// 输出配置
 const outputConfigs = {
   'esm-bundler': {
     file: resolve(`dist/${name}.esm-bundler.js`),
@@ -47,7 +50,7 @@ const outputConfigs = {
   },
   'global-runtime': {
     file: resolve(`dist/${name}.runtime.global.js`),
-    format: 'iife'
+    format: 'iife' // 立即执行表达式
   }
 }
 
@@ -114,6 +117,7 @@ function createConfig(format, output, plugins = []) {
   // during a single build.
   hasTSChecked = true
 
+  // 入口文件，默认情况下携带编译器版本
   const entryFile = /runtime$/.test(format) ? `src/runtime.ts` : `src/index.ts`
 
   const external =

@@ -436,6 +436,8 @@ function baseCreateRenderer(
 ): HydrationRenderer
 
 // implementation
+// 创建renderer对象，它对外暴露3个重要⽅法 render , hydrate , createApp ，其中 render ,和
+// hydrate 的实际使⽤者是createApp()返回的vue实例对象
 function baseCreateRenderer(
   options: RendererOptions,
   createHydrationFns?: typeof createHydrationFunctions
@@ -2307,6 +2309,8 @@ function baseCreateRenderer(
     >)
   }
 
+  // 创建renderer对象，它对外暴露3个重要⽅法 render , hydrate , createApp ，其中 render ,和
+  // hydrate 的实际使⽤者是createApp()返回的vue实例对象
   return {
     render,
     hydrate,

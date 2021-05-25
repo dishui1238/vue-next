@@ -121,6 +121,9 @@ export type CreateAppFunction<HostElement> = (
 
 let uid = 0
 
+// 现component()/directive()/use()/mixin()这些⽅法都变成了实例⽅法，它们也会返回实例本
+// 身，链式调⽤成为可能。
+// filter⽅法被移除了
 export function createAppAPI<HostElement>(
   render: RootRenderFunction,
   hydrate?: RootHydrateFunction

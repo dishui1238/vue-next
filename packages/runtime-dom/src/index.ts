@@ -51,6 +51,7 @@ export const hydrate = ((...args) => {
   ensureHydrationRenderer().hydrate(...args)
 }) as RootHydrateFunction
 
+// createApp 创建vue实例、扩展mount⽅法
 export const createApp = ((...args) => {
   const app = ensureRenderer().createApp(...args)
 
@@ -60,6 +61,7 @@ export const createApp = ((...args) => {
   }
 
   const { mount } = app
+  // 挂载 mount
   app.mount = (containerOrSelector: Element | ShadowRoot | string): any => {
     const container = normalizeContainer(containerOrSelector)
     if (!container) return
