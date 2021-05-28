@@ -1248,6 +1248,7 @@ function baseCreateRenderer(
     }
   }
 
+  // 执⾏组件挂载或更新，由于⾸次执⾏时n1为空，因此执⾏组件挂载逻辑mountComponent()
   const processComponent = (
     n1: VNode | null,
     n2: VNode,
@@ -1285,6 +1286,7 @@ function baseCreateRenderer(
     }
   }
 
+  // 创建组件实例，执⾏setupComponent()设置其数据状态，其中就包括setup()选项的执⾏
   const mountComponent: MountComponentFn = (
     initialVNode,
     container,
@@ -1294,6 +1296,7 @@ function baseCreateRenderer(
     isSVG,
     optimized
   ) => {
+    // 创建组件实例
     const instance: ComponentInternalInstance = (initialVNode.component = createComponentInstance(
       initialVNode,
       parentComponent,
@@ -1318,6 +1321,7 @@ function baseCreateRenderer(
     if (__DEV__) {
       startMeasure(instance, `init`)
     }
+    // 安装组件
     setupComponent(instance)
     if (__DEV__) {
       endMeasure(instance, `init`)
@@ -1337,6 +1341,7 @@ function baseCreateRenderer(
       return
     }
 
+    // 建立渲染函数的副作用：依赖收集
     setupRenderEffect(
       instance,
       initialVNode,
@@ -1398,6 +1403,7 @@ function baseCreateRenderer(
     optimized
   ) => {
     // create reactive effect for rendering
+    // effect 可以建立一个依赖关系：传入 effect 的回调函数和响应式数据之间
     instance.update = effect(function componentEffect() {
       if (!instance.isMounted) {
         let vnodeHook: VNodeHook | null | undefined
@@ -1417,6 +1423,7 @@ function baseCreateRenderer(
         if (__DEV__) {
           startMeasure(instance, `render`)
         }
+        // subTree 是当前组件的 vnode
         const subTree = (instance.subTree = renderComponentRoot(instance))
         if (__DEV__) {
           endMeasure(instance, `render`)
@@ -1441,6 +1448,7 @@ function baseCreateRenderer(
           if (__DEV__) {
             startMeasure(instance, `patch`)
           }
+          // 更新 初始化
           patch(
             null,
             subTree,
@@ -1525,6 +1533,7 @@ function baseCreateRenderer(
         if (__DEV__) {
           startMeasure(instance, `patch`)
         }
+        // 更新
         patch(
           prevTree,
           nextTree,

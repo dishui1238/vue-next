@@ -93,7 +93,7 @@ export function reactive(target: object) {
   return createReactiveObject(
     target,
     false,
-    mutableHandlers,
+    mutableHandlers, // mutableHandlers 处理 get, set, deleteProterty 等拦截操作
     mutableCollectionHandlers,
     reactiveMap
   )
@@ -104,6 +104,7 @@ export function reactive(target: object) {
  * level properties are reactive. It also does not auto-unwrap refs (even at the
  * root level).
  */
+// 创建一个响应式代理，它跟踪其自身 property 的响应性，但不执行嵌套对象的深层响应式转换 (暴露原始值)。
 export function shallowReactive<T extends object>(target: T): T {
   return createReactiveObject(
     target,
@@ -192,6 +193,7 @@ function createReactiveObject(
     return target
   }
   // target already has corresponding Proxy
+  // 如果已存在直接返回
   const existingProxy = proxyMap.get(target)
   if (existingProxy) {
     return existingProxy
@@ -201,9 +203,13 @@ function createReactiveObject(
   if (targetType === TargetType.INVALID) {
     return target
   }
+
+  const handler =
+    targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
   const proxy = new Proxy(
     target,
-    targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
+    // targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
+    handler
   )
   proxyMap.set(target, proxy)
   return proxy

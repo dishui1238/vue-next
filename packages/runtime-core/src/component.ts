@@ -612,6 +612,7 @@ function setupStatefulComponent(
       handleSetupResult(instance, setupResult, isSSR)
     }
   } else {
+    // 处理选项等事务
     finishComponentSetup(instance, isSSR)
   }
 }
@@ -696,6 +697,7 @@ function finishComponentSetup(
       if (__DEV__) {
         startMeasure(instance, `compile`)
       }
+      // 获取渲染函数
       Component.render = compile(Component.template, {
         isCustomElement: instance.appContext.config.isCustomElement,
         delimiters: Component.delimiters
@@ -719,6 +721,7 @@ function finishComponentSetup(
   }
 
   // support for 2.x options
+  // 支持 2.x 选项
   if (__FEATURE_OPTIONS_API__) {
     currentInstance = instance
     pauseTracking()

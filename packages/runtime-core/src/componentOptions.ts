@@ -579,6 +579,7 @@ export function applyOptions(
     }
   }
 
+  // 初始化顺序 
   // options initialization order (to be consistent with Vue 2):
   // - props (already done outside of this function)
   // - inject
@@ -643,12 +644,14 @@ export function applyOptions(
     }
   }
 
+  // 如果 data 不是混入形式
   if (!asMixin) {
     if (deferredData.length) {
       deferredData.forEach(dataFn => resolveData(instance, dataFn, publicThis))
     }
     if (dataOptions) {
       // @ts-ignore dataOptions is not fully type safe
+      // 数据响应式
       resolveData(instance, dataOptions, publicThis)
     }
     if (__DEV__) {
@@ -889,6 +892,7 @@ function resolveData(
     )
   }
   shouldCacheAccess = false
+  // 获取数据对象
   const data = dataFn.call(publicThis, publicThis)
   shouldCacheAccess = true
   if (__DEV__ && isPromise(data)) {
@@ -901,6 +905,7 @@ function resolveData(
   if (!isObject(data)) {
     __DEV__ && warn(`data() should return an object.`)
   } else if (instance.data === EMPTY_OBJ) {
+    // 对 data 做响应式处理
     instance.data = reactive(data)
   } else {
     // existing data: this is a mixin or extends.
