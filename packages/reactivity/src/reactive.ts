@@ -204,6 +204,7 @@ function createReactiveObject(
     return target
   }
 
+  // 如果目标对象是 Set, Map, WeakMap, WeakSet 类型，那么 hander函数是 collectionHandlers 否侧目标函数是baseHandlers
   const handler =
     targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
   const proxy = new Proxy(

@@ -725,6 +725,7 @@ function finishComponentSetup(
   if (__FEATURE_OPTIONS_API__) {
     currentInstance = instance
     pauseTracking()
+    // 处理 options 形式的组件
     applyOptions(instance, Component)
     resetTracking()
     currentInstance = null

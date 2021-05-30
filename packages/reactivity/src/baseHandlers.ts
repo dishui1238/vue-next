@@ -159,6 +159,7 @@ function createSetter(shallow = false) {
       // in shallow mode, objects are set as-is regardless of reactive or not
     }
 
+    // 判断target有没有当前key,如果存在的话，改变属性，如果当前key不存在，说明是赋值新属性
     const hadKey =
       isArray(target) && isIntegerKey(key)
         ? Number(key) < target.length

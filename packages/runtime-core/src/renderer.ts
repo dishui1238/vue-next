@@ -1286,6 +1286,7 @@ function baseCreateRenderer(
     }
   }
 
+  // !组件初始化阶段
   // 创建组件实例，执⾏setupComponent()设置其数据状态，其中就包括setup()选项的执⾏
   const mountComponent: MountComponentFn = (
     initialVNode,
@@ -1296,7 +1297,7 @@ function baseCreateRenderer(
     isSVG,
     optimized
   ) => {
-    // 创建组件实例
+    // 1. 创建组件实例
     const instance: ComponentInternalInstance = (initialVNode.component = createComponentInstance(
       initialVNode,
       parentComponent,
@@ -1321,7 +1322,7 @@ function baseCreateRenderer(
     if (__DEV__) {
       startMeasure(instance, `init`)
     }
-    // 安装组件
+    // 2. 安装组件 初始化组件,建立proxy , 根据字符窜模版得到
     setupComponent(instance)
     if (__DEV__) {
       endMeasure(instance, `init`)
@@ -1341,7 +1342,7 @@ function baseCreateRenderer(
       return
     }
 
-    // 建立渲染函数的副作用：依赖收集
+    // 3. 建立渲染函数的副作用：依赖收集
     setupRenderEffect(
       instance,
       initialVNode,
@@ -1404,7 +1405,9 @@ function baseCreateRenderer(
   ) => {
     // create reactive effect for rendering
     // effect 可以建立一个依赖关系：传入 effect 的回调函数和响应式数据之间
+    // componentEffect 是真正的更新方法
     instance.update = effect(function componentEffect() {
+      // 初始化
       if (!instance.isMounted) {
         let vnodeHook: VNodeHook | null | undefined
         const { el, props } = initialVNode
